@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: adam-summer-2026
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: EDIT_CODE
+        sync: false   # your private edit passcode — set it in the Render dashboard
+      # For durable free storage, create a free Upstash Redis DB and set these two
+      # (paste the values from the Upstash console). Without them the plan is kept
+      # in the container filesystem, which the free tier wipes when it sleeps.
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false

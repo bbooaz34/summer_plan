@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#eaf2ff" />
+<title>הקיץ של אדם ☀️</title>
+<style>
+  :root {
+    --blue: #0a84ff;
+    --pink: #ff5fa2;
+    --purple: #bf5af2;
+    --green: #30d158;
+    --orange: #ff9f0a;
+    --red: #ff453a;
+    --teal: #40c8e0;
+    --ink: #1c1c2e;
+    --ink-soft: #5b5b70;
+    --glass: rgba(255, 255, 255, 0.55);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --hair: rgba(255, 255, 255, 0.7);
+    --shadow: 0 10px 40px rgba(60, 80, 160, 0.16);
+    --radius: 26px;
+    font-family: -apple-system, "SF Pro Text", "SF Pro Display", "Helvetica Neue",
+      "Assistant", "Heebo", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body { margin: 0; min-height: 100%; }
+
+  body {
+    color: var(--ink);
+    background:
+      radial-gradient(120% 80% at 85% -10%, #ffe1ef 0%, rgba(255,225,239,0) 55%),
+      radial-gradient(120% 80% at 10% 0%, #d9ecff 0%, rgba(217,236,255,0) 55%),
+      radial-gradient(140% 100% at 50% 120%, #e7dcff 0%, rgba(231,220,255,0) 60%),
+      linear-gradient(180deg, #eaf3ff 0%, #f4ecff 100%);
+    background-attachment: fixed;
+    padding: env(safe-area-inset-top) 14px calc(env(safe-area-inset-bottom) + 90px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 560px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+  header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 22px 6px 16px;
+  }
+  .sun {
+    width: 52px; height: 52px; border-radius: 18px; flex: none;
+    display: grid; place-items: center; font-size: 26px;
+    background: linear-gradient(160deg, #ffd76a, #ff9f0a);
+    box-shadow: 0 8px 22px rgba(255, 159, 10, 0.4);
+  }
+  header h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
+  header p { margin: 2px 0 0; color: var(--ink-soft); font-size: 14px; font-weight: 500; }
+  .lock-btn {
+    margin-inline-start: auto; border: 0; cursor: pointer;
+    width: 46px; height: 46px; border-radius: 16px; flex: none;
+    background: var(--glass); backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--hair); box-shadow: var(--shadow);
+    font-size: 20px; display: grid; place-items: center; transition: transform .15s;
+  }
+  .lock-btn:active { transform: scale(0.92); }
+
+  /* ---------- Glass card ---------- */
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+  }
+
+  .month-card { padding: 16px 14px 20px; margin-bottom: 16px; }
+  .month-title {
+    text-align: center; font-size: 19px; font-weight: 800; margin: 2px 0 14px;
+    letter-spacing: -0.3px;
+  }
+
+  .weekdays, .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+  .weekdays { margin-bottom: 8px; }
+  .weekdays div {
+    text-align: center; font-size: 12px; font-weight: 700; color: var(--ink-soft);
+    padding-bottom: 2px;
+  }
+  .weekdays .we { color: var(--pink); }
+
+  .cell {
+    position: relative; aspect-ratio: 1 / 1.15; border-radius: 16px;
+    background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.6);
+    display: flex; flex-direction: column; padding: 6px 5px; overflow: hidden;
+    cursor: default; transition: transform .12s, box-shadow .12s;
+  }
+  .cell.empty { background: transparent; border: 0; }
+  .cell.clickable { cursor: pointer; }
+  .cell.clickable:active { transform: scale(0.95); }
+  .cell .dnum { font-size: 13px; font-weight: 700; color: var(--ink); opacity: .8; }
+  .cell.weekend { background: rgba(255, 95, 162, 0.10); border-color: rgba(255,95,162,0.22); }
+  .cell.weekend .dnum { color: var(--pink); }
+  .cell.today { outline: 2px solid var(--blue); outline-offset: -2px; }
+
+  .cell .who {
+    margin-top: auto; display: flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; line-height: 1.15;
+    color: #fff; padding: 3px 5px; border-radius: 9px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.14);
+  }
+  .cell .vac {
+    margin-top: auto; font-size: 11px; font-weight: 800; color: #fff;
+    background: linear-gradient(160deg, #ff9f0a, #ff5fa2);
+    padding: 3px 5px; border-radius: 9px; text-align: center;
+    box-shadow: 0 3px 8px rgba(255,120,80,0.3);
+  }
+  .cell .dot {
+    position: absolute; inset-inline-end: 6px; top: 6px; width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ---------- Legend ---------- */
+  .legend { padding: 14px 16px; margin-bottom: 16px; }
+  .legend h3 { margin: 0 0 10px; font-size: 14px; font-weight: 800; color: var(--ink-soft); }
+  .legend .items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700;
+    background: rgba(255,255,255,0.6); border: 1px solid var(--hair);
+    padding: 5px 11px; border-radius: 999px;
+  }
+  .chip .sw { width: 12px; height: 12px; border-radius: 50%; }
+  .legend .empty-note { color: var(--ink-soft); font-size: 13px; }
+
+  /* ---------- Editor toolbar ---------- */
+  .toolbar {
+    position: fixed; inset-inline: 0; bottom: 0; z-index: 40;
+    padding: 12px 14px calc(env(safe-area-inset-bottom) + 12px);
+    display: none; gap: 10px; justify-content: center;
+  }
+  .toolbar.on { display: flex; }
+  .tb-inner {
+    display: flex; gap: 10px; width: 100%; max-width: 560px;
+  }
+  .btn {
+    flex: 1; border: 0; cursor: pointer; font-family: inherit;
+    font-size: 15px; font-weight: 700; padding: 14px 16px; border-radius: 18px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    transition: transform .12s, opacity .2s;
+    background: var(--glass-strong); backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--hair); box-shadow: var(--shadow); color: var(--ink);
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn.primary { background: linear-gradient(160deg, #0a84ff, #4db2ff); color: #fff; border: 0; }
+  .btn.primary:disabled { opacity: .5; }
+
+  /* ---------- Sheet ---------- */
+  .scrim {
+    position: fixed; inset: 0; z-index: 50; background: rgba(30,30,50,0.28);
+    backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity .25s;
+  }
+  .scrim.on { opacity: 1; pointer-events: auto; }
+  .sheet {
+    position: fixed; inset-inline: 0; bottom: 0; z-index: 60;
+    background: var(--glass-strong);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-top-left-radius: 30px; border-top-right-radius: 30px;
+    border-top: 1px solid var(--hair);
+    box-shadow: 0 -14px 50px rgba(50,60,130,0.22);
+    padding: 10px 18px calc(env(safe-area-inset-bottom) + 22px);
+    transform: translateY(110%); transition: transform .32s cubic-bezier(.32,.72,0,1);
+    max-width: 560px; margin: 0 auto; max-height: 82vh; overflow-y: auto;
+  }
+  .sheet.on { transform: translateY(0); }
+  .grabber { width: 40px; height: 5px; border-radius: 3px; background: rgba(60,60,90,0.25);
+    margin: 6px auto 14px; }
+  .sheet h2 { margin: 0 0 4px; font-size: 20px; font-weight: 800; }
+  .sheet .sub { margin: 0 0 16px; color: var(--ink-soft); font-size: 14px; }
+
+  .opt {
+    width: 100%; display: flex; align-items: center; gap: 12px; text-align: start;
+    background: rgba(255,255,255,0.55); border: 1px solid var(--hair);
+    border-radius: 16px; padding: 13px 14px; margin-bottom: 9px; cursor: pointer;
+    font-family: inherit; font-size: 16px; font-weight: 600; color: var(--ink);
+    transition: transform .1s;
+  }
+  .opt:active { transform: scale(0.98); }
+  .opt .sw { width: 22px; height: 22px; border-radius: 50%; flex: none; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+  .opt.sel { outline: 2px solid var(--blue); outline-offset: -2px; }
+  .opt .check { margin-inline-start: auto; color: var(--blue); font-weight: 800; }
+  .opt.vac-opt { background: linear-gradient(160deg, rgba(255,159,10,.16), rgba(255,95,162,.16)); }
+  .opt.danger { color: var(--red); justify-content: center; font-weight: 700; }
+
+  /* people manager */
+  .prow { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prow .sw { width: 30px; height: 30px; border-radius: 50%; flex: none; border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15); cursor: pointer; }
+  .prow input {
+    flex: 1; font-family: inherit; font-size: 16px; font-weight: 600; color: var(--ink);
+    background: rgba(255,255,255,0.6); border: 1px solid var(--hair); border-radius: 14px;
+    padding: 11px 13px; outline: none;
+  }
+  .prow input:focus { border-color: var(--blue); }
+  .prow .del { border: 0; background: rgba(255,69,58,0.12); color: var(--red);
+    width: 40px; height: 40px; border-radius: 13px; font-size: 18px; cursor: pointer; flex: none; }
+  .add-row {
+    width: 100%; border: 1.5px dashed rgba(10,132,255,0.5); background: rgba(10,132,255,0.06);
+    color: var(--blue); font-weight: 700; font-size: 15px; padding: 13px; border-radius: 16px;
+    cursor: pointer; font-family: inherit; margin-top: 4px;
+  }
+  .swatches { display: flex; flex-wrap: wrap; gap: 10px; padding: 6px 0 4px; }
+  .swatches .s { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+  .swatches .s.sel { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .field {
+    width: 100%; font-family: inherit; font-size: 17px; text-align: center; letter-spacing: 6px;
+    background: rgba(255,255,255,0.6); border: 1px solid var(--hair); border-radius: 16px;
+    padding: 14px; outline: none; margin: 6px 0 14px; font-weight: 700;
+  }
+  .field:focus { border-color: var(--blue); }
+  .err { color: var(--red); font-size: 13px; font-weight: 600; margin: -8px 0 12px; min-height: 16px; }
+
+  .save-flash {
+    position: fixed; top: calc(env(safe-area-inset-top) + 14px); inset-inline: 0; z-index: 80;
+    display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .3s;
+  }
+  .save-flash.on { opacity: 1; }
+  .save-flash span {
+    background: rgba(48,209,88,0.95); color: #fff; font-weight: 700; font-size: 14px;
+    padding: 9px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(48,209,88,.4);
+  }
+  .ro-banner {
+    text-align: center; color: var(--ink-soft); font-size: 13px; font-weight: 600;
+    padding: 4px 0 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="sun">☀️</div>
+      <div>
+        <h1>הקיץ של אדם</h1>
+        <p>מי שומר על אדם · אוגוסט 2026</p>
+      </div>
+      <button class="lock-btn" id="lockBtn" title="עריכה">🔒</button>
+    </header>
+
+    <div class="glass legend" id="legend"></div>
+
+    <div class="glass month-card">
+      <div class="month-title">אוגוסט 2026</div>
+      <div class="weekdays" id="weekdays"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div class="ro-banner" id="roBanner">תצוגה בלבד · התוכנית מנוהלת על ידי ההורים</div>
+  </div>
+
+  <!-- editor toolbar -->
+  <div class="toolbar" id="toolbar">
+    <div class="tb-inner">
+      <button class="btn" id="peopleBtn">👥 מטפלים</button>
+      <button class="btn primary" id="saveBtn">💾 שמירה ושיתוף</button>
+    </div>
+  </div>
+
+  <div class="scrim" id="scrim"></div>
+
+  <!-- day sheet -->
+  <div class="sheet" id="daySheet">
+    <div class="grabber"></div>
+    <h2 id="dayTitle">יום</h2>
+    <p class="sub">מי שומר על אדם ביום הזה?</p>
+    <div id="dayOptions"></div>
+  </div>
+
+  <!-- people sheet -->
+  <div class="sheet" id="peopleSheet">
+    <div class="grabber"></div>
+    <h2>ניהול מטפלים</h2>
+    <p class="sub">הוספה, עריכה או מחיקה של אנשים ברשימה</p>
+    <div id="peopleList"></div>
+    <button class="add-row" id="addPersonBtn">＋ הוספת מטפל</button>
+  </div>
+
+  <!-- passcode sheet -->
+  <div class="sheet" id="codeSheet">
+    <div class="grabber"></div>
+    <h2>מצב עריכה</h2>
+    <p class="sub">הזינו את קוד העריכה כדי לערוך את התוכנית</p>
+    <input class="field" id="codeInput" type="password" inputmode="numeric" placeholder="••••" />
+    <div class="err" id="codeErr"></div>
+    <button class="btn primary" id="codeSubmit" style="width:100%">כניסה</button>
+  </div>
+
+  <div class="save-flash" id="flash"><span>נשמר! ✓</span></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var YEAR = 2026, MONTH = 7; // August (0-indexed)
+  var WEEKDAYS = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+  var WEEKDAYS_SHORT = ["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","ש׳"];
+  var PALETTE = ["#0a84ff","#ff5fa2","#30d158","#bf5af2","#ff9f0a","#40c8e0","#ff453a","#5e5ce6","#ffd60a","#64d2ff"];
+
+  var state = { people: [], days: {}, updatedAt: null };
+  var editMode = false;
+  var editCode = null;
+  var selectedDate = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function dateKey(day) {
+    return YEAR + "-" + String(MONTH + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+  }
+  function isWeekend(dow) { return dow === 5 || dow === 6; } // Fri, Sat
+  function personById(id) {
+    for (var i = 0; i < state.people.length; i++) if (state.people[i].id === id) return state.people[i];
+    return null;
+  }
+  function uid() { return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  // ---------- Rendering ----------
+  function renderWeekdays() {
+    var el = $("weekdays"); el.innerHTML = "";
+    for (var i = 0; i < 7; i++) {
+      var d = document.createElement("div");
+      d.textContent = WEEKDAYS_SHORT[i];
+      if (isWeekend(i)) d.className = "we";
+      el.appendChild(d);
+    }
+  }
+
+  function renderGrid() {
+    var grid = $("grid"); grid.innerHTML = "";
+    var first = new Date(YEAR, MONTH, 1).getDay();
+    var daysInMonth = new Date(YEAR, MONTH + 1, 0).getDate();
+    var today = new Date();
+    var todayKey = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+
+    for (var i = 0; i < first; i++) {
+      var e = document.createElement("div"); e.className = "cell empty"; grid.appendChild(e);
+    }
+    for (var day = 1; day <= daysInMonth; day++) {
+      var dow = new Date(YEAR, MONTH, day).getDay();
+      var key = dateKey(day);
+      var entry = state.days[key];
+      var cell = document.createElement("div");
+      cell.className = "cell";
+      if (isWeekend(dow)) cell.className += " weekend";
+      if (key === todayKey) cell.className += " today";
+      if (editMode) { cell.className += " clickable"; cell.dataset.day = day; }
+
+      var num = document.createElement("div");
+      num.className = "dnum"; num.textContent = day;
+      cell.appendChild(num);
+
+      if (entry && entry.type === "vacation") {
+        var v = document.createElement("div"); v.className = "vac"; v.textContent = "חופשה 🏖️";
+        cell.appendChild(v);
+      } else if (entry && entry.type === "person") {
+        var p = personById(entry.personId);
+        if (p) {
+          var w = document.createElement("div"); w.className = "who";
+          w.style.background = p.color; w.textContent = p.name;
+          cell.appendChild(w);
+        }
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  function renderLegend() {
+    var el = $("legend");
+    var used = {};
+    Object.keys(state.days).forEach(function (k) {
+      var e = state.days[k];
+      if (e && e.type === "person") used[e.personId] = true;
+    });
+    var chips = "";
+    state.people.forEach(function (p) {
+      chips += '<span class="chip"><span class="sw" style="background:' + p.color + '"></span>' + escapeHtml(p.name) + "</span>";
+    });
+    chips += '<span class="chip"><span class="sw" style="background:linear-gradient(160deg,#ff9f0a,#ff5fa2)"></span>חופשה משפחתית</span>';
+    chips += '<span class="chip"><span class="sw" style="background:rgba(255,95,162,.4)"></span>סופ״ש</span>';
+    var body = state.people.length ? '<div class="items">' + chips + "</div>"
+      : '<div class="empty-note">עדיין לא הוגדרו מטפלים. ' + (editMode ? "הוסיפו מטפלים דרך כפתור 👥." : "") + "</div>";
+    el.innerHTML = "<h3>מקרא</h3>" + body;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function renderAll() { renderGrid(); renderLegend(); }
+
+  // ---------- Sheets ----------
+  function openSheet(id) { $("scrim").classList.add("on"); $(id).classList.add("on"); }
+  function closeSheets() {
+    $("scrim").classList.remove("on");
+    ["daySheet","peopleSheet","codeSheet"].forEach(function (s) { $(s).classList.remove("on"); });
+  }
+  $("scrim").addEventListener("click", closeSheets);
+
+  // ---------- Day editing ----------
+  function openDay(day) {
+    selectedDate = day;
+    var dow = new Date(YEAR, MONTH, day).getDay();
+    $("dayTitle").textContent = day + " באוגוסט · יום " + WEEKDAYS[dow];
+    var key = dateKey(day);
+    var entry = state.days[key];
+    var box = $("dayOptions"); box.innerHTML = "";
+
+    // vacation option
+    var vac = document.createElement("button");
+    vac.className = "opt vac-opt" + (entry && entry.type === "vacation" ? " sel" : "");
+    vac.innerHTML = '<span class="sw" style="background:linear-gradient(160deg,#ff9f0a,#ff5fa2)"></span>חופשה משפחתית 🏖️' +
+      (entry && entry.type === "vacation" ? '<span class="check">✓</span>' : "");
+    vac.onclick = function () { setDay(key, { type: "vacation" }); };
+    box.appendChild(vac);
+
+    // people
+    if (!state.people.length) {
+      var note = document.createElement("p");
+      note.className = "sub"; note.style.margin = "12px 0";
+      note.textContent = "אין מטפלים ברשימה. הוסיפו אותם דרך כפתור 👥 מטפלים.";
+      box.appendChild(note);
+    }
+    state.people.forEach(function (p) {
+      var sel = entry && entry.type === "person" && entry.personId === p.id;
+      var b = document.createElement("button");
+      b.className = "opt" + (sel ? " sel" : "");
+      b.innerHTML = '<span class="sw" style="background:' + p.color + '"></span>' + escapeHtml(p.name) +
+        (sel ? '<span class="check">✓</span>' : "");
+      b.onclick = function () { setDay(key, { type: "person", personId: p.id }); };
+      box.appendChild(b);
+    });
+
+    // clear
+    if (entry) {
+      var clr = document.createElement("button");
+      clr.className = "opt danger";
+      clr.textContent = "נקה יום זה";
+      clr.onclick = function () { delete state.days[key]; renderAll(); closeSheets(); markDirty(); };
+      box.appendChild(clr);
+    }
+    openSheet("daySheet");
+  }
+
+  function setDay(key, val) { state.days[key] = val; renderAll(); closeSheets(); markDirty(); }
+
+  $("grid").addEventListener("click", function (e) {
+    if (!editMode) return;
+    var cell = e.target.closest(".cell.clickable");
+    if (cell && cell.dataset.day) openDay(parseInt(cell.dataset.day, 10));
+  });
+
+  // ---------- People manager ----------
+  function openPeople() {
+    var list = $("peopleList"); list.innerHTML = "";
+    state.people.forEach(function (p) { list.appendChild(personRow(p)); });
+    openSheet("peopleSheet");
+  }
+
+  function personRow(p) {
+    var row = document.createElement("div"); row.className = "prow";
+    var sw = document.createElement("div"); sw.className = "sw"; sw.style.background = p.color;
+    var picker = null;
+    sw.onclick = function () {
+      if (picker) { picker.remove(); picker = null; return; }
+      picker = swatchPicker(p, function () { picker.remove(); picker = null; sw.style.background = p.color; renderAll(); markDirty(); });
+      row.after(picker);
+    };
+    var inp = document.createElement("input");
+    inp.value = p.name; inp.placeholder = "שם";
+    inp.oninput = function () { p.name = inp.value; renderAll(); markDirty(); };
+    var del = document.createElement("button");
+    del.className = "del"; del.textContent = "🗑";
+    del.onclick = function () {
+      state.people = state.people.filter(function (x) { return x.id !== p.id; });
+      Object.keys(state.days).forEach(function (k) {
+        if (state.days[k].type === "person" && state.days[k].personId === p.id) delete state.days[k];
+      });
+      openPeople(); renderAll(); markDirty();
+    };
+    row.appendChild(sw); row.appendChild(inp); row.appendChild(del);
+    return row;
+  }
+
+  function swatchPicker(p, done) {
+    var wrap = document.createElement("div"); wrap.className = "swatches";
+    PALETTE.forEach(function (c) {
+      var s = document.createElement("div"); s.className = "s" + (c === p.color ? " sel" : "");
+      s.style.background = c;
+      s.onclick = function () { p.color = c; done(); };
+      wrap.appendChild(s);
+    });
+    return wrap;
+  }
+
+  $("addPersonBtn").addEventListener("click", function () {
+    var used = state.people.map(function (p) { return p.color; });
+    var color = PALETTE.filter(function (c) { return used.indexOf(c) === -1; })[0] || PALETTE[state.people.length % PALETTE.length];
+    var np = { id: uid(), name: "", color: color };
+    state.people.push(np);
+    var row = personRow(np);
+    $("peopleList").appendChild(row);
+    row.querySelector("input").focus();
+    markDirty();
+  });
+
+  // ---------- Local backup (per-device, keeps your edits across refresh) ----------
+  var LS_KEY = "adamSummerPlan2026";
+  function saveLocal() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify({ people: state.people, days: state.days })); } catch (e) {}
+  }
+  function loadLocal() {
+    try {
+      var s = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+      if (s) { state.people = s.people || []; state.days = s.days || {}; return true; }
+    } catch (e) {}
+    return false;
+  }
+
+  // ---------- Save ----------
+  var dirty = false;
+  function markDirty() { dirty = true; saveLocal(); $("saveBtn").textContent = "💾 שמירה ושיתוף"; }
+
+  function flash() {
+    var f = $("flash"); f.classList.add("on");
+    setTimeout(function () { f.classList.remove("on"); }, 1600);
+  }
+
+  $("saveBtn").addEventListener("click", function () {
+    if (!editCode) return;
+    var btn = $("saveBtn"); btn.disabled = true; btn.textContent = "שומר…";
+    saveLocal();
+    fetch("/api/plan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-edit-code": editCode },
+      body: JSON.stringify({ people: state.people, days: state.days })
+    }).then(function (r) {
+      return r.json().then(function (body) { return { ok: r.ok, status: r.status, body: body }; });
+    }).then(function (res) {
+      btn.disabled = false; btn.textContent = "💾 שמירה ושיתוף";
+      if (!res.ok) {
+        var d = (res.body && res.body.detail) ? " (" + res.body.detail + ")" : "";
+        alert("השמירה לשרת נכשלה" + d + ".\nהשינויים נשמרו במכשיר הזה, אך כדי לשתף עם המשפחה צריך אחסון בענן — ראו /api/health.");
+        return;
+      }
+      state.updatedAt = res.body.updatedAt; dirty = false; flash();
+    }).catch(function (e) {
+      btn.disabled = false; btn.textContent = "💾 שמירה ושיתוף";
+      alert("אין חיבור לשרת. ודאו שהאתר רץ דרך הכתובת של Render (לא פתיחת הקובץ ישירות). השינויים נשמרו במכשיר הזה.");
+    });
+  });
+
+  $("peopleBtn").addEventListener("click", openPeople);
+
+  // ---------- Passcode / edit mode ----------
+  $("lockBtn").addEventListener("click", function () {
+    if (editMode) {
+      editMode = false; editCode = null;
+      $("toolbar").classList.remove("on");
+      $("lockBtn").textContent = "🔒";
+      $("roBanner").style.display = "";
+      renderAll();
+    } else {
+      $("codeInput").value = ""; $("codeErr").textContent = "";
+      openSheet("codeSheet");
+      setTimeout(function () { $("codeInput").focus(); }, 300);
+    }
+  });
+
+  function submitCode() {
+    var code = $("codeInput").value.trim();
+    if (!code) return;
+    fetch("/api/verify", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: code })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (res.ok) {
+        editCode = code; editMode = true;
+        $("toolbar").classList.add("on");
+        $("lockBtn").textContent = "🔓";
+        $("roBanner").style.display = "none";
+        closeSheets(); renderAll();
+      } else {
+        $("codeErr").textContent = "קוד שגוי, נסו שוב";
+      }
+    }).catch(function () { $("codeErr").textContent = "שגיאת רשת"; });
+  }
+  $("codeSubmit").addEventListener("click", submitCode);
+  $("codeInput").addEventListener("keydown", function (e) { if (e.key === "Enter") submitCode(); });
+
+  // ---------- Load ----------
+  function load() {
+    fetch("/api/plan").then(function (r) {
+      if (!r.ok) throw new Error("bad status");
+      return r.json();
+    }).then(function (data) {
+      var hasServerData = (data.people && data.people.length) ||
+        (data.days && Object.keys(data.days).length);
+      if (hasServerData) {
+        state.people = data.people || [];
+        state.days = data.days || {};
+        state.updatedAt = data.updatedAt || null;
+      } else {
+        loadLocal(); // server empty (e.g. free tier reset) — restore this device's backup
+      }
+      renderAll();
+    }).catch(function () {
+      loadLocal(); // no server (opened as a file, or offline) — use local backup
+      renderAll();
+    });
+  }
+
+  renderWeekdays();
+  renderAll();
+  load();
+})();
+</script>
+</body>
+</html>
